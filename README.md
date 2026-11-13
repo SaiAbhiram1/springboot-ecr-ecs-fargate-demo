@@ -1,5 +1,15 @@
 # 🚀 Spring Boot ECR ECS Fargate Demo
 
+## 🎥 Demo Video
+
+[Watch the demo](https://drive.google.com/file/d/1pChuY7mTEyJGMzxxCR7fQBzdgK4Rn1IO/view?usp=sharing)
+
+The video shows the Docker image in Amazon ECR, the running ECS Fargate task, its public IP, and the live application in the browser.
+
+> The app is not kept running all the time, to save AWS credits. The demo video shows it running on AWS.
+
+---
+
 ## 📌 Project Overview
 
 This project demonstrates how to containerize a Spring Boot application using Docker and deploy it on AWS using Amazon ECR, Amazon ECS, and AWS Fargate.
@@ -41,6 +51,7 @@ Web Browser
 * AWS Fargate
 * AWS IAM
 * AWS VPC
+* AWS CLI
 
 ---
 
@@ -60,17 +71,12 @@ springboot-ecr-ecs-fargate-demo
 
 ---
 
-## ⚙️ Application Endpoint
+## ⚙️ Application Endpoints
 
-```http
-GET /
-```
-
-### Sample Response
-
-```text
-Hello from AWS ECS!
-```
+| Endpoint | Description |
+|---|---|
+| `GET /` | Styled landing page: "Hello from AWS ECS!" |
+| `GET /health` | Returns `Application Healthy` |
 
 ---
 
@@ -91,13 +97,13 @@ Windows:
 ### Build Docker Image
 
 ```bash
-docker build -t springboot-ecs-demo:v1 .
+docker build -t springboot-ecs-demo:v2 .
 ```
 
 ### Run Container Locally
 
 ```bash
-docker run -d -p 8080:8080 --name springboot-ecs-demo-container springboot-ecs-demo:v1
+docker run -d -p 8080:8080 --name springboot-ecs-demo-container springboot-ecs-demo:v2
 ```
 
 ### Verify
@@ -133,13 +139,13 @@ aws ecr get-login-password --region ap-south-1 | docker login --username AWS --p
 ### Tag Image
 
 ```bash
-docker tag springboot-ecs-demo:v1 <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/springboot-ecs-demo:v1
+docker tag springboot-ecs-demo:v2 <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/springboot-ecs-demo:v2
 ```
 
 ### Push Image
 
 ```bash
-docker push <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/springboot-ecs-demo:v1
+docker push <ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/springboot-ecs-demo:v2
 ```
 
 ---
@@ -186,6 +192,17 @@ springboot-ecs-demo-service
 
 ---
 
+## 🔁 Updating the Application
+
+1. Change the code and rebuild the JAR with Maven.
+2. Build a new Docker image with a new tag (for example `v2`).
+3. Push the new image to Amazon ECR.
+4. Create a new task definition revision that uses the new image tag.
+5. Update the ECS service to use the new revision.
+6. Open the new public IP of the running task on port 8080.
+
+---
+
 ## 🔄 Deployment Workflow
 
 ```text
@@ -214,7 +231,7 @@ springboot-ecs-demo-service
 ### Amazon ECS
 
 * Clusters
-* Task Definitions
+* Task Definitions and Revisions
 * Services
 * Deployments
 
@@ -249,6 +266,7 @@ Run
 * Stored Docker images in Amazon ECR.
 * Created ECS clusters and task definitions.
 * Deployed containers using AWS Fargate.
+* Released a new version by pushing a new image and updating the ECS service.
 * Exposed the application using a public IP.
 * Understood the complete container deployment lifecycle on AWS.
 
@@ -257,5 +275,3 @@ Run
 ## 👨‍💻 Author
 
 Sai Abhiram
-
-
